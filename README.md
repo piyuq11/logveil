@@ -10,6 +10,7 @@ It is designed for developers, support teams, maintainers, and anyone who needs 
 - Private-key headers
 - Password, token, API-key, and secret assignments
 - Email addresses (optional)
+- IPv4 addresses (optional, with `--redact-ipv4`)
 - Sensitive values in nested JSON and JSONL objects
 - Additional JSON keys supplied by the user
 
@@ -38,6 +39,14 @@ Sanitize a file:
 ```bash
 logveil server.log -o server.safe.log
 ```
+
+Redact client or server IPv4 addresses when needed:
+
+```bash
+logveil server.log --redact-ipv4 -o server.safe.log
+```
+
+IPv4 redaction is disabled by default to avoid changing ordinary log data.
 
 Preserve JSONL structure and redact a project-specific field:
 

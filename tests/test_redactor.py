@@ -46,3 +46,50 @@ class RedactorTests(unittest.TestCase):
         result = Redactor().redact_text(source)
         self.assertEqual(result.value, source)
         self.assertEqual(result.replacements, 0)
+
+    def test_redacts_ipv4_addresses_only_when_enabled(self):
+        source = "client=192.168.1.10 upstream=255.255.255.255:443"
+        unchanged = Redactor().redact_text(source)
+        self.assertEqual(unchanged.value, source)
+        self.assertEqual(unchanged.replacements, 0)
+
+        result = Redactor(redact_ipv4=True).redact_text(source)
+        self.assertEqual(
+            result.value,
+            "client=[REDACTED] upstream=[REDACTED]:443",
+        )
+        self.assertEqual(result.replacements, 2)
+
+    def test_uses_custom_replacement_for_ipv4(self):
+        result = Redactor(replacement="<IP>", redact_ipv4=True).redact_text(
+            "client=10.0.0.1"
+        )
+        self.assertEqual(result.value, "client=<IP>")
+        self.assertEqual(result.replacements, 1)
+
+    def test_rejects_invalid_or_partial_ipv4_candidates(self):
+        source = (
+            "valid=0.0.0.0 invalid_octet=256.1.2.3 "
+            "missing_octet=1.2.3 leading_zero=01.2.3.4 "
+            "long_form=1.2.3.4.5 embedded=v1.2.3.4 sentence=10.0.0.2."
+        )
+        result = Redactor(redact_ipv4=True).redact_text(source)
+        self.assertEqual(
+            result.value,
+            "valid=[REDACTED] invalid_octet=256.1.2.3 "
+            "missing_octet=1.2.3 leading_zero=01.2.3.4 "
+            "long_form=1.2.3.4.5 embedded=v1.2.3.4 sentence=[REDACTED].",
+        )
+        self.assertEqual(result.replacements, 2)
+
+    def test_redacts_ipv4_inside_json_strings(self):
+        source = '{"client_ip":"10.0.0.1","message":"connected to 192.0.2.5:8443"}'
+        result = Redactor(redact_ipv4=True).redact_json_line(source)
+        self.assertEqual(
+            json.loads(result.value),
+            {
+                "client_ip": "[REDACTED]",
+                "message": "connected to [REDACTED]:8443",
+            },
+        )
+        self.assertEqual(result.replacements, 2)
