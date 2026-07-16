@@ -37,12 +37,14 @@ class Redactor:
         replacement: str = "[REDACTED]",
         sensitive_keys: Iterable[str] = (),
         redact_emails: bool = True,
+        redact_ipv4: bool = False,
     ) -> None:
         self.replacement = replacement
         self.sensitive_keys = DEFAULT_SENSITIVE_KEYS | {
             key.casefold() for key in sensitive_keys
         }
         self.redact_emails = redact_emails
+        self.redact_ipv4 = redact_ipv4
         self._patterns = self._build_patterns()
 
     def _build_patterns(self) -> tuple[re.Pattern[str], ...]:
@@ -58,6 +60,11 @@ class Redactor:
         ]
         if self.redact_emails:
             patterns.append(r"(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b")
+        if self.redact_ipv4:
+            patterns.append(
+                r"(?<!\d)(?:25[0-5]|2[0-4]\d|1?\d?\d)"
+                r"(?:\.(?:25[0-5]|2[0-4]\d|1?\d?\d)){3}(?!\d)"
+            )
         return tuple(re.compile(pattern) for pattern in patterns)
 
     def redact_text(self, text: str) -> RedactionResult:

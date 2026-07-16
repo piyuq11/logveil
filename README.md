@@ -10,6 +10,7 @@ It is designed for developers, support teams, maintainers, and anyone who needs 
 - Private-key headers
 - Password, token, API-key, and secret assignments
 - Email addresses (optional)
+- IPv4 addresses (opt-in)
 - Sensitive values in nested JSON and JSONL objects
 - Additional JSON keys supplied by the user
 
@@ -57,6 +58,12 @@ Keep email addresses when they are required for diagnosis:
 
 ```bash
 logveil server.log --keep-emails
+```
+
+Redact IPv4 addresses in text and JSON strings:
+
+```bash
+logveil server.log --redact-ipv4
 ```
 
 Try the included synthetic sample:

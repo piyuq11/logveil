@@ -2,6 +2,10 @@
 
 All notable changes are documented here.
 
+## 0.1.2 - 2026-07-16
+
+- Add optional IPv4 address redaction enabled with `--redact-ipv4`; applies to text and JSON strings.
+
 ## 0.1.1 - 2026-07-16
 
 - Use the available PyPI distribution name `logveil-cli` while keeping the

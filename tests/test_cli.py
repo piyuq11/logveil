@@ -14,6 +14,7 @@ def args(**overrides):
         "jsonl": False,
         "strict_jsonl": False,
         "report": False,
+        "redact_ipv4": False,
     }
     values.update(overrides)
     return argparse.Namespace(**values)
