@@ -2,6 +2,10 @@
 
 All notable changes are documented here.
 
+## Unreleased
+
+- Add opt-in IPv4 address redaction with the `--redact-ipv4` CLI flag.
+
 ## 0.1.1 - 2026-07-16
 
 - Use the available PyPI distribution name `logveil-cli` while keeping the
