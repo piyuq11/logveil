@@ -59,6 +59,12 @@ Keep email addresses when they are required for diagnosis:
 logveil server.log --keep-emails
 ```
 
+Try the included synthetic sample:
+
+```bash
+logveil examples/sample.log --report
+```
+
 ## Design principles
 
 - Local only: no network requests and no telemetry

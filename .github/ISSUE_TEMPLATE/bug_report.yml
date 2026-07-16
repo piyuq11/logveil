@@ -1,0 +1,21 @@
+name: Bug report
+description: Report a redaction bug or false positive
+title: "bug: "
+body:
+  - type: markdown
+    attributes:
+      value: Never include real credentials or private logs.
+  - type: textarea
+    id: input
+    attributes:
+      label: Synthetic input
+      description: A minimal example using fake values only.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual output
+    validations:
+      required: true
+

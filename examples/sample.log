@@ -1,0 +1,3 @@
+2026-07-16 INFO login email=developer@example.com token=demo-token-123456
+2026-07-16 ERROR request failed Authorization: Bearer demoBearerToken123456
+

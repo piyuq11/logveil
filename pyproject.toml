@@ -25,6 +25,8 @@ logveil = "logveil.cli:main"
 Homepage = "https://github.com/piyuq11/logveil"
 Issues = "https://github.com/piyuq11/logveil/issues"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/logveil"]
+
 [tool.pytest.ini_options]
 pythonpath = ["src"]
-
