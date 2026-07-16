@@ -31,18 +31,27 @@ DEFAULT_SENSITIVE_KEYS = frozenset(
 )
 
 
+_IPV4_OCTET = r"(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])"
+_IPV4_PATTERN = (
+    rf"(?<![A-Za-z0-9_.])(?:{_IPV4_OCTET}\.){{3}}{_IPV4_OCTET}"
+    r"(?=$|[^A-Za-z0-9_.]|\.(?:$|[^A-Za-z0-9_.]))"
+)
+
+
 class Redactor:
     def __init__(
         self,
         replacement: str = "[REDACTED]",
         sensitive_keys: Iterable[str] = (),
         redact_emails: bool = True,
+        redact_ipv4: bool = False,
     ) -> None:
         self.replacement = replacement
         self.sensitive_keys = DEFAULT_SENSITIVE_KEYS | {
             key.casefold() for key in sensitive_keys
         }
         self.redact_emails = redact_emails
+        self.redact_ipv4 = redact_ipv4
         self._patterns = self._build_patterns()
 
     def _build_patterns(self) -> tuple[re.Pattern[str], ...]:
@@ -58,6 +67,8 @@ class Redactor:
         ]
         if self.redact_emails:
             patterns.append(r"(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b")
+        if self.redact_ipv4:
+            patterns.append(_IPV4_PATTERN)
         return tuple(re.compile(pattern) for pattern in patterns)
 
     def redact_text(self, text: str) -> RedactionResult:
