@@ -16,7 +16,7 @@ It is designed for developers, support teams, maintainers, and anyone who needs 
 ## Install
 
 ```bash
-python -m pip install logveil
+python -m pip install logveil-cli
 ```
 
 For local development:

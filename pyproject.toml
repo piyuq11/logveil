@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "logveil"
-version = "0.1.0"
+name = "logveil-cli"
+version = "0.1.1"
 description = "Redact secrets and personal data from logs locally"
 readme = "README.md"
 requires-python = ">=3.9"
