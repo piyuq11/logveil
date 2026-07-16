@@ -3,7 +3,7 @@ import io
 import unittest
 from contextlib import redirect_stderr
 
-from logveil.cli import process
+from logveil.cli import build_parser, process
 
 
 def args(**overrides):
@@ -11,6 +11,7 @@ def args(**overrides):
         "replacement": "[REDACTED]",
         "key": [],
         "keep_emails": False,
+        "redact_ipv4": False,
         "jsonl": False,
         "strict_jsonl": False,
         "report": False,
@@ -46,3 +47,16 @@ class CliTests(unittest.TestCase):
         self.assertEqual(status, 0)
         self.assertEqual(output.getvalue(), "[REDACTED]\n")
         self.assertIn("1 replacement", report.getvalue())
+
+    def test_ipv4_flag_is_exposed_and_wired(self):
+        parsed = build_parser().parse_args(["--redact-ipv4"])
+        self.assertTrue(parsed.redact_ipv4)
+
+        output = io.StringIO()
+        status = process(
+            io.StringIO("client=192.168.1.10\n"),
+            output,
+            args(redact_ipv4=True),
+        )
+        self.assertEqual(status, 0)
+        self.assertEqual(output.getvalue(), "client=[REDACTED]\n")
