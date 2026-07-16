@@ -72,6 +72,9 @@ logveil examples/sample.log --report
 - Conservative: targeted rules avoid rewriting ordinary identifiers
 - Composable: works with pipes, redirected output, and JSONL tooling
 
+See [the roadmap](docs/ROADMAP.md) for planned improvements and [the code of
+conduct](CODE_OF_CONDUCT.md) for project participation guidelines.
+
 ## Limits
 
 Automated redaction reduces accidental disclosure but cannot recognize every secret format. Review sanitized output before publishing it. `logveil` deliberately avoids attempting to decode, validate, or transmit detected values. It is not a replacement for secret rotation after an exposure.
