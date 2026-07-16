@@ -22,6 +22,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--strict-jsonl", action="store_true", help="fail on invalid JSONL")
     parser.add_argument("--keep-emails", action="store_true", help="do not redact emails")
     parser.add_argument(
+        "--redact-ipv4",
+        action="store_true",
+        help="redact IPv4 addresses",
+    )
+    parser.add_argument(
         "--key",
         action="append",
         default=[],
@@ -38,6 +43,7 @@ def process(source: TextIO, destination: TextIO, args: argparse.Namespace) -> in
         replacement=args.replacement,
         sensitive_keys=args.key,
         redact_emails=not args.keep_emails,
+        redact_ipv4=args.redact_ipv4,
     )
     total = 0
     invalid = 0
